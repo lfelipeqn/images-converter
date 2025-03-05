@@ -4,10 +4,13 @@ project(images-processor)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Let CMake find OpenCV automatically (most reliable).  Consider specifying version if needed
-find_package(OpenCV 4 REQUIRED) # Or find_package(OpenCV REQUIRED) if you don't care about version
+# Find OpenCV (version 4 or newer)
+find_package(OpenCV 4 REQUIRED)
+
+# Find the Google Cloud Storage component (installed via vcpkg)
+find_package(google_cloud_cpp_storage CONFIG REQUIRED)
 
 add_executable(images-processor images-processor.cpp)
 
-# Link against the OpenCV library (CMake will resolve the correct library names).
-target_link_libraries(images-processor ${OpenCV_LIBS})
+# Link against OpenCV, libcurl, and the google-cloud-cpp storage component
+target_link_libraries(images-processor PRIVATE ${OpenCV_LIBS} CURL::libcurl google-cloud-cpp::storage)
